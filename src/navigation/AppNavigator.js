@@ -1,13 +1,8 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeScreen from '../screens/HomeScreen';
-import AddExpenseScreen from '../screens/AddExpenseScreen';
-import SettingsScreen from '../screens/SettingsScreen';
 import BootSplash from 'react-native-bootsplash';
 import { trackScreenView } from '../utils/analytics';
-
-const Stack = createNativeStackNavigator();
+import BottomNavigator from './BottomNavigator';
 
 export default function AppNavigator() {
   return (
@@ -28,26 +23,7 @@ export default function AppNavigator() {
         }
       }}
     >
-      <Stack.Navigator
-        initialRouteName="Home"
-        screenOptions={{
-          headerStyle: { backgroundColor: '#FFFFFF' },
-          headerTintColor: '#0F172A',
-          headerTitleStyle: { fontWeight: 'bold' },
-        }}
-      >
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen
-          name="AddExpense"
-          component={AddExpenseScreen}
-          options={{ title: 'Tambah' }}
-        />
-        <Stack.Screen
-          name="Settings"
-          component={SettingsScreen}
-          options={{ title: 'Pengaturan' }}
-        />
-      </Stack.Navigator>
+      <BottomNavigator />
     </NavigationContainer>
   );
 }

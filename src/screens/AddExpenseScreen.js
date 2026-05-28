@@ -46,7 +46,16 @@ export default function AddExpenseScreen() {
       style={styles.container}
       contentContainerStyle={{ padding: 16 }}
     >
-      <Text style={styles.lbl}>Nominal (Rp)</Text>
+      <Text
+        variant="labelLarge"
+        style={{
+          fontWeight: 'bold',
+          marginBottom: 8,
+          marginTop: 16,
+        }}
+      >
+        Nominal (Rp)
+      </Text>
       <TextInput
         mode="outlined"
         keyboardType="numeric"
@@ -56,7 +65,16 @@ export default function AddExpenseScreen() {
         style={styles.inp}
       />
 
-      <Text style={styles.lbl}>Tempat / Merchant</Text>
+      <Text
+        variant="labelLarge"
+        style={{
+          fontWeight: 'bold',
+          marginBottom: 8,
+          marginTop: 16,
+        }}
+      >
+        Tempat / Merchant
+      </Text>
       <TextInput
         mode="outlined"
         value={merchant}
@@ -65,7 +83,16 @@ export default function AddExpenseScreen() {
         style={styles.inp}
       />
 
-      <Text style={styles.lbl}>Kategori</Text>
+      <Text
+        variant="labelLarge"
+        style={{
+          fontWeight: 'bold',
+          marginBottom: 8,
+          marginTop: 16,
+        }}
+      >
+        Kategori
+      </Text>
       <View style={styles.chips}>
         {CATS.map(c => (
           <Chip
@@ -93,13 +120,6 @@ export default function AddExpenseScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#F8FAFC' },
-  lbl: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    marginBottom: 8,
-    marginTop: 16,
-    color: '#0F172A',
-  },
   inp: { backgroundColor: '#FFF' },
   chips: { flexDirection: 'row', flexWrap: 'wrap' },
   btn: { marginTop: 32, paddingVertical: 6 },

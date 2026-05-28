@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, FlatList, StyleSheet } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, FlatList } from 'react-native';
 import {
   FAB,
   Card,
@@ -8,27 +8,32 @@ import {
   Divider,
   ProgressBar,
   Text,
+  useTheme,
 } from 'react-native-paper';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { getExpenses, getProfile } from '../storage/expenseStorage';
 import { formatCurrency } from '../utils/formatCurrency';
 import { format } from 'date-fns';
 import { trackScreenView } from '../utils/analytics';
+import { useSettings } from '../context/SettingContext';
+import { translations } from '../utils/translations';
 
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen() {
+  const { language, currency } = useSettings();
+  const t = translations[language];
+  const theme = useTheme();
   const [expenses, setExpenses] = useState([]);
   const [profile, setProfile] = useState({ name: 'User', budget: 0 });
+  const nav = useNavigation();
 
-  // Reload data setiap layar muncul
   useFocusEffect(
-    React.useCallback(() => {
+    useCallback(() => {
       loadData();
     }, []),
   );
 
-  // Track screen view untuk analytics
   useFocusEffect(
-    React.useCallback(() => {
+    useCallback(() => {
       trackScreenView('home_screen');
     }, []),
   );
@@ -39,19 +44,19 @@ export default function HomeScreen({ navigation }) {
     setProfile(p);
   };
 
-  const totalSpent = expenses.reduce((sum, i) => sum + (i.amount || 0), 0);
-  const budget = profile.budget || 0;
-  const percent = budget > 0 ? Math.min((totalSpent / budget) * 100, 100) : 0;
+  const total = expenses?.reduce((s, i) => s + (i?.amount || 0), 0);
+  const budget = profile?.budget || 0;
+  const pct = budget > 0 ? Math?.min((total / budget) * 100, 100) : 0;
 
   return (
-    <View style={styles.container}>
-      <Card style={styles.card}>
+    <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
+      <Card style={{ margin: 16, marginBottom: 0 }}>
         <Card.Content>
-          <Text variant="bodyLarge" style={{ color: '#64748B' }}>
+          <Text variant="bodyLarge" style={{ color: theme.colors.caption }}>
             Halo, {profile.name} 👋
           </Text>
-          <Text variant="bodyMedium" style={{ color: '#64748B' }}>
-            Total Pengeluaran
+          <Text variant="bodyMedium" style={{ color: theme.colors.caption }}>
+            {t.total}
           </Text>
           <Text
             variant="displaySmall"
@@ -60,20 +65,21 @@ export default function HomeScreen({ navigation }) {
               marginVertical: 8,
             }}
           >
-            {formatCurrency(totalSpent)}
+            {formatCurrency(total, currency)}
           </Text>
 
           {budget > 0 && (
-            <View style={styles.budgetBox}>
+            <View style={{ marginTop: 8 }}>
               <Text
                 variant="bodySmall"
-                style={{ color: '#64748B', marginBottom: 6 }}
+                style={{ color: theme.colors.caption, marginBottom: 6 }}
               >
-                Budget: {formatCurrency(budget)}
+                {t.budget}: {formatCurrency(budget, currency)} (
+                {Math.round(pct)}%)
               </Text>
               <ProgressBar
-                progress={percent / 100}
-                color="#4F46E5"
+                progress={pct / 100}
+                color={pct < 75 ? theme.colors.primary : theme.colors.error}
                 style={{ height: 8, borderRadius: 4 }}
               />
             </View>
@@ -82,56 +88,49 @@ export default function HomeScreen({ navigation }) {
       </Card>
 
       <Text variant="titleMedium" style={{ margin: 16, marginBottom: 0 }}>
-        Riwayat
+        {t.recent}
       </Text>
       <FlatList
         data={expenses.slice(0, 15)}
         keyExtractor={item => item.id}
         renderItem={({ item }) => (
           <List.Item
-            title={item.merchant || 'Tanpa Nama'}
-            description={`${formatCurrency(item.amount)} • ${item.category}`}
+            title={item.merchant || '-'}
+            description={`${formatCurrency(item.amount, currency)} • ${
+              item.category
+            }`}
             left={props => <List.Icon {...props} icon="cash" />}
             titleStyle={{ fontSize: 15, fontWeight: '500' }}
-            descriptionStyle={{ color: '#64748B' }}
+            descriptionStyle={{ color: theme.colors.caption }}
           />
         )}
         ItemSeparatorComponent={() => <Divider inset />}
         ListEmptyComponent={
           <Text
             variant="bodyMedium"
-            style={{ textAlign: 'center', marginTop: 40, color: '#94A3B8' }}
+            style={{
+              textAlign: 'center',
+              marginTop: 40,
+              color: theme.colors.caption,
+            }}
           >
-            Belum ada pengeluaran 📭
+            {t.empty}
           </Text>
         }
         contentContainerStyle={{ paddingBottom: 100 }}
       />
 
       <FAB
-        style={styles.fab}
+        style={{
+          position: 'absolute',
+          right: 16,
+          bottom: 16,
+          backgroundColor: theme.colors.primary,
+        }}
+        color={theme.colors.onPrimary}
         icon="plus"
-        onPress={() => navigation.navigate('AddExpense')}
-      />
-      <IconButton
-        icon="cog-outline"
-        size={28}
-        style={styles.settBtn}
-        onPress={() => navigation.navigate('Settings')}
+        onPress={() => nav.navigate('AddExpense', { refresh: loadData })}
       />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F8FAFC' },
-  card: { margin: 16, marginBottom: 0 },
-  budgetBox: { marginTop: 8 },
-  fab: {
-    position: 'absolute',
-    right: 16,
-    bottom: 16,
-    backgroundColor: '#4F46E5',
-  },
-  settBtn: { position: 'absolute', right: 8, top: 12 },
-});
