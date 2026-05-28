@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "400846229871",
+    "project_id": "expensehub-c80b0",
+    "storage_bucket": "expensehub-c80b0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:400846229871:android:945d2891e6d1cd04ec989a",
+        "android_client_info": {
+          "package_name": "com.expensehub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1o1hSZgCU6WyibDdqrSiAdtnh4Plzovo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
