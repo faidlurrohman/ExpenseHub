@@ -1,22 +1,34 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, Alert } from 'react-native';
-import { TextInput, Button, Chip, Text } from 'react-native-paper';
+import { TextInput, Button, Chip, Text, useTheme } from 'react-native-paper';
 import { addExpense } from '../storage/expenseStorage';
 import { useNavigation } from '@react-navigation/native';
 import { trackExpenseAdded } from '../utils/analytics';
+import { useSettings } from '../context/SettingsContext';
+import { translations } from '../utils/translations';
 
-const CATS = ['🍔 Makanan', '🚗 Transport', '🛒 Belanja', '📦 Lainnya'];
+const CATS = [
+  'food',
+  'transport',
+  'shopping',
+  'entertainment',
+  'bills',
+  'other',
+];
 
 export default function AddExpenseScreen() {
+  const { language, currency } = useSettings();
+  const t = translations[language];
+  const theme = useTheme();
   const [amount, setAmount] = useState('');
   const [merchant, setMerchant] = useState('');
-  const [category, setCategory] = useState('🍔 Makanan');
+  const [category, setCategory] = useState(t.food);
   const [loading, setLoading] = useState(false);
   const nav = useNavigation();
 
   const handleSave = async () => {
     if (!amount || isNaN(Number(amount))) {
-      Alert.alert('Error', 'Nominal tidak valid');
+      Alert.alert(t.error, t.invalidAmount);
       return;
     }
 
@@ -31,11 +43,10 @@ export default function AddExpenseScreen() {
 
       await trackExpenseAdded(parseFloat(amount), category, merchant);
 
-      Alert.alert('Sukses', 'Data tersimpan');
+      Alert.alert(t.success, t.saved);
       nav.goBack();
     } catch (error) {
-      console.error('Error saving expense:', error);
-      Alert.alert('Gagal', 'Terjadi kesalahan');
+      Alert.alert(t.error, t.failedSave);
     } finally {
       setLoading(false);
     }
@@ -43,7 +54,7 @@ export default function AddExpenseScreen() {
 
   return (
     <ScrollView
-      style={styles.container}
+      style={{ flex: 1, backgroundColor: theme.colors.background }}
       contentContainerStyle={{ padding: 16 }}
     >
       <Text
@@ -54,7 +65,7 @@ export default function AddExpenseScreen() {
           marginTop: 16,
         }}
       >
-        Nominal (Rp)
+        {t.amount}
       </Text>
       <TextInput
         mode="outlined"
@@ -62,7 +73,6 @@ export default function AddExpenseScreen() {
         value={amount}
         onChangeText={setAmount}
         placeholder="0"
-        style={styles.inp}
       />
 
       <Text
@@ -73,16 +83,14 @@ export default function AddExpenseScreen() {
           marginTop: 16,
         }}
       >
-        Tempat / Merchant
+        {t.merchant}
       </Text>
       <TextInput
         mode="outlined"
         value={merchant}
         onChangeText={setMerchant}
-        placeholder="Contoh: Indomaret"
-        style={styles.inp}
+        placeholder={t.merchant}
       />
-
       <Text
         variant="labelLarge"
         style={{
@@ -91,17 +99,32 @@ export default function AddExpenseScreen() {
           marginTop: 16,
         }}
       >
-        Kategori
+        {t.category}
       </Text>
+
       <View style={styles.chips}>
         {CATS.map(c => (
           <Chip
             key={c}
-            selected={category === c}
+            mode="flat"
+            compact
+            // selected={category === c}
             onPress={() => setCategory(c)}
-            style={{ marginBottom: 8, marginRight: 8 }}
+            selectedColor={
+              category === c
+                ? theme.colors.onPrimary
+                : theme.colors.onSurfaceVariant
+            }
+            style={{
+              marginBottom: 8,
+              marginRight: 8,
+              backgroundColor:
+                category === c
+                  ? theme.colors.primary
+                  : theme.colors.surfaceDisabled,
+            }}
           >
-            {c}
+            {t?.[c]}
           </Chip>
         ))}
       </View>
@@ -112,15 +135,13 @@ export default function AddExpenseScreen() {
         loading={loading}
         style={styles.btn}
       >
-        SIMPAN
+        {t.save}
       </Button>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F8FAFC' },
-  inp: { backgroundColor: '#FFF' },
   chips: { flexDirection: 'row', flexWrap: 'wrap' },
   btn: { marginTop: 32, paddingVertical: 6 },
 });

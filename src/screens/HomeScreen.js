@@ -15,7 +15,7 @@ import { getExpenses, getProfile } from '../storage/expenseStorage';
 import { formatCurrency } from '../utils/formatCurrency';
 import { format } from 'date-fns';
 import { trackScreenView } from '../utils/analytics';
-import { useSettings } from '../context/SettingContext';
+import { useSettings } from '../context/SettingsContext';
 import { translations } from '../utils/translations';
 
 export default function HomeScreen() {
@@ -61,7 +61,7 @@ export default function HomeScreen() {
           <Text
             variant="displaySmall"
             style={{
-              color: '#0F172A',
+              color: theme.colors.primary,
               marginVertical: 8,
             }}
           >
@@ -126,6 +126,7 @@ export default function HomeScreen() {
           right: 16,
           bottom: 16,
           backgroundColor: theme.colors.primary,
+          borderRadius: 999,
         }}
         color={theme.colors.onPrimary}
         icon="plus"

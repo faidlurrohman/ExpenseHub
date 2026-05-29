@@ -16,7 +16,7 @@ import {
 } from '../storage/expenseStorage';
 import { trackBudgetSet, trackDataExport } from '../utils/analytics';
 import { translations } from '../utils/translations';
-import { useSettings } from '../context/SettingContext';
+import { useSettings } from '../context/SettingsContext';
 
 export default function SettingsScreen() {
   const {
@@ -50,16 +50,13 @@ export default function SettingsScreen() {
     }
 
     setLoading(false);
-    Alert.alert('Tersimpan', 'Pengaturan diperbarui');
+    Alert.alert(t.saved, t.updated);
   };
 
   const exportData = async () => {
     const data = await getExpenses();
     await trackDataExport('json');
-    Alert.alert(
-      'Export Data',
-      `Salin data ini untuk backup:\n\n${JSON.stringify(data)}`,
-    );
+    Alert.alert(t.export, `${t.copyData}\n\n${JSON.stringify(data)}`);
   };
 
   return (
@@ -70,16 +67,33 @@ export default function SettingsScreen() {
       <Text variant="titleMedium" style={{ marginBottom: 20 }}>
         {t.profile}
       </Text>
+
+      <Text
+        variant="labelLarge"
+        style={{
+          fontWeight: 'bold',
+          marginBottom: 8,
+        }}
+      >
+        {t.name}
+      </Text>
       <TextInput
         mode="outlined"
-        label="Nama"
         value={profile.name}
         onChangeText={t => setProfile(p => ({ ...p, name: t }))}
         style={{ marginBottom: 16 }}
       />
+      <Text
+        variant="labelLarge"
+        style={{
+          fontWeight: 'bold',
+          marginBottom: 8,
+        }}
+      >
+        {t.budget}
+      </Text>
       <TextInput
         mode="outlined"
-        label="Budget Bulanan (Rp)"
         keyboardType="numeric"
         value={profile.budget}
         onChangeText={t => setProfile(p => ({ ...p, budget: t }))}
@@ -92,13 +106,14 @@ export default function SettingsScreen() {
         loading={loading}
         style={styles.btn}
       >
-        SIMPAN PERUBAHAN
+        {t.save}
       </Button>
 
       <Divider style={styles.div} />
 
       <List.Item
         title={t.theme}
+        description={themeMode === 'dark' ? t.dark : t.light}
         right={() => (
           <Switch
             value={themeMode === 'dark'}

@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Appearance } from 'react-native';
 
 const SettingsContext = createContext();
 
@@ -12,14 +13,21 @@ export const SettingsProvider = ({ children }) => {
   useEffect(() => {
     const load = async () => {
       try {
-        const [t, l, c] = await Promise.all([
+        const [storedTheme, storedLang, storedCurrency] = await Promise.all([
           AsyncStorage.getItem('app_theme'),
           AsyncStorage.getItem('app_lang'),
           AsyncStorage.getItem('app_currency'),
         ]);
-        if (t) setThemeMode(t);
-        if (l) setLanguage(l);
-        if (c) setCurrency(c);
+        if (storedTheme) {
+          setThemeMode(storedTheme);
+        } else {
+          const systemColorScheme = Appearance.getColorScheme();
+          const systemTheme = systemColorScheme === 'dark' ? 'dark' : 'light';
+          setThemeMode(systemTheme);
+        }
+
+        if (storedLang) setLanguage(storedLang);
+        if (storedCurrency) setCurrency(storedCurrency);
       } catch (e) {
         console.error('Load settings error', e);
       } finally {
