@@ -59,6 +59,27 @@ export default function SettingsScreen() {
     Alert.alert(t.export, `${t.copyData}\n\n${JSON.stringify(data)}`);
   };
 
+  const cycleTheme = () => {
+    let nextTheme;
+
+    if (themeMode === 'system') {
+      nextTheme = 'light';
+    } else if (themeMode === 'light') {
+      nextTheme = 'dark';
+    } else {
+      nextTheme = 'system';
+    }
+
+    updateTheme(nextTheme);
+  };
+
+  const getThemeDescription = () => {
+    if (themeMode === 'system') {
+      return t.system;
+    }
+    return themeMode === 'dark' ? t.dark : t.light;
+  };
+
   return (
     <ScrollView
       style={{ flex: 1, backgroundColor: theme.colors.background }}
@@ -113,14 +134,9 @@ export default function SettingsScreen() {
 
       <List.Item
         title={t.theme}
-        description={themeMode === 'dark' ? t.dark : t.light}
+        description={getThemeDescription()}
         right={() => (
-          <Switch
-            value={themeMode === 'dark'}
-            onValueChange={() =>
-              updateTheme(themeMode === 'dark' ? 'light' : 'dark')
-            }
-          />
+          <Switch value={themeMode === 'dark'} onValueChange={cycleTheme} />
         )}
       />
       <List.Item

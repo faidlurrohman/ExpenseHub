@@ -5,10 +5,24 @@ import { Appearance } from 'react-native';
 const SettingsContext = createContext();
 
 export const SettingsProvider = ({ children }) => {
-  const [themeMode, setThemeMode] = useState('light');
+  const [themeMode, setThemeMode] = useState('system'); // 'system', 'light', or 'dark'
   const [language, setLanguage] = useState('id');
   const [currency, setCurrency] = useState('IDR');
   const [isLoaded, setIsLoaded] = useState(false);
+
+  const getSystemColorScheme = () => {
+    const colorScheme = Appearance.getColorScheme();
+
+    return colorScheme === 'dark' ? 'dark' : 'light';
+  };
+
+  const resolveTheme = mode => {
+    if (mode === 'system') {
+      return getSystemColorScheme();
+    }
+
+    return mode;
+  };
 
   useEffect(() => {
     const load = async () => {
@@ -18,16 +32,26 @@ export const SettingsProvider = ({ children }) => {
           AsyncStorage.getItem('app_lang'),
           AsyncStorage.getItem('app_currency'),
         ]);
+
         if (storedTheme) {
           setThemeMode(storedTheme);
         } else {
-          const systemColorScheme = Appearance.getColorScheme();
-          const systemTheme = systemColorScheme === 'dark' ? 'dark' : 'light';
-          setThemeMode(systemTheme);
+          const colorScheme = Appearance.getColorScheme();
+
+          if (colorScheme) {
+            setThemeMode('system');
+          } else {
+            setThemeMode('light');
+          }
         }
 
-        if (storedLang) setLanguage(storedLang);
-        if (storedCurrency) setCurrency(storedCurrency);
+        if (storedLang) {
+          setLanguage(storedLang);
+        }
+
+        if (storedCurrency) {
+          setCurrency(storedCurrency);
+        }
       } catch (e) {
         console.error('Load settings error', e);
       } finally {
@@ -62,6 +86,7 @@ export const SettingsProvider = ({ children }) => {
         updateTheme,
         updateLang,
         updateCurrency,
+        resolveTheme,
       }}
     >
       {children}

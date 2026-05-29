@@ -6,18 +6,18 @@
     </style>
 
     <!-- Light Splash Theme -->
-    <style name="BootTheme.Light" parent="Theme.BootSplash">
+    <!-- <style name="BootTheme.Light" parent="Theme.BootSplash">
         <item name="bootSplashBackground">@color/bootsplash_background_light</item>
         <item name="bootSplashLogo">@drawable/bootsplash_logo</item>
         <item name="postBootSplashTheme">@style/AppTheme</item>
-    </style>
+    </style> -->
 
     <!-- Dark Splash Theme -->
-    <style name="BootTheme.Dark" parent="Theme.BootSplash">
+    <!-- <style name="BootTheme.Dark" parent="Theme.BootSplash">
         <item name="bootSplashBackground">@color/bootsplash_background_dark</item>
         <item name="bootSplashLogo">@drawable/bootsplash_logo</item>
         <item name="postBootSplashTheme">@style/AppTheme</item>
-    </style>
+    </style> -->
 
     <!-- <style name="BootTheme" parent="Theme.BootSplash">
         <item name="bootSplashBackground">@color/bootsplash_background</item>

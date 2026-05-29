@@ -15,10 +15,11 @@ Catat pengeluaran harian dengan mudah. Scan struk, AI parsing otomatis, dan kelo
 ## 📥 Installation
 
 ```bash
-git clone https://github.com/yourusername/ExpenseHub.git
+git clone https://github.com/faidlurrohman/ExpenseHub.git
 cd ExpenseHub
 npm install
-npx react-native run-android
+npm run start
+npm run android
 ```
 
 ## 🛠️ Tech Stack
