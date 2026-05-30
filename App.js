@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { PaperProvider } from 'react-native-paper';
+import { PaperProvider, useTheme } from 'react-native-paper';
 import { darkTheme, lightTheme } from './src/theme';
 import AppNavigator from './src/navigation/AppNavigator';
 import { SettingsProvider, useSettings } from './src/context/SettingsContext';
@@ -9,9 +9,9 @@ import BootSplash from 'react-native-bootsplash';
 
 const useNativeDriver = Platform.OS !== 'web';
 
-function ThemedBootSplash() {
+function ThemedBootSplash({ onAnimationEnd }) {
   const colorScheme = Appearance.getColorScheme();
-  const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
+  const theme = useTheme();
   const [opacity] = useState(() => new Animated.Value(1));
   const [translateY] = useState(() => new Animated.Value(0));
 
@@ -45,10 +45,9 @@ function ThemedBootSplash() {
         toValue: 0,
         duration: 150,
         delay: 350,
-      }).start();
-      // .start(() => {
-      //   onAnimationEnd();
-      // });
+      }).start(() => {
+        onAnimationEnd();
+      });
     },
   });
 
@@ -92,24 +91,20 @@ function AppContent() {
     return () => subscription.remove();
   }, [themeMode, resolveTheme]);
 
-  useEffect(() => {
-    if (isLoaded) {
-      BootSplash.hide({ fade: true }).then(() => {
-        setSplashVisible(false);
-      });
-    }
-  }, [isLoaded]);
-
-  if (!isLoaded) {
-    return <ThemedBootSplash />;
-  }
-
   const theme = actualTheme === 'dark' ? darkTheme : lightTheme;
 
   return (
     <SafeAreaProvider>
       <PaperProvider theme={theme}>
         <AppNavigator />
+
+        {splashVisible && (
+          <ThemedBootSplash
+            onAnimationEnd={() => {
+              setSplashVisible(false);
+            }}
+          />
+        )}
       </PaperProvider>
     </SafeAreaProvider>
   );

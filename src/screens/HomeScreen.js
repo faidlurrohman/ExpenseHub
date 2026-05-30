@@ -130,7 +130,7 @@ export default function HomeScreen() {
         }}
         color={theme.colors.onPrimary}
         icon="plus"
-        onPress={() => nav.navigate('AddExpense', { refresh: loadData })}
+        onPress={() => nav.navigate('AddExpense')}
       />
     </View>
   );

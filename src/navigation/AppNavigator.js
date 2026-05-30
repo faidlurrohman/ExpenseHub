@@ -34,15 +34,15 @@ export default function AppNavigator() {
   return (
     <NavigationContainer
       theme={navTheme}
-      onReady={async () => {
-        const isVisible = await BootSplash.isVisible();
+      // onReady={async () => {
+      //   const isVisible = await BootSplash.isVisible();
 
-        if (isVisible) {
-          await new Promise(resolve => setTimeout(resolve, 100));
-          await BootSplash.hide({ fade: true });
-          await trackScreenView('app_launch');
-        }
-      }}
+      //   if (isVisible) {
+      //     await new Promise(resolve => setTimeout(resolve, 100));
+      //     await BootSplash.hide({ fade: true });
+      //     await trackScreenView('app_launch');
+      //   }
+      // }}
       onStateChange={async state => {
         if (state) {
           const currentRoute = state.routes[state.index];

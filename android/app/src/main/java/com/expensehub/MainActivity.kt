@@ -1,12 +1,11 @@
 package com.expensehub
 
-// import android.content.res.Configuration
 import android.os.Bundle
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnabled
 import com.facebook.react.defaults.DefaultReactActivityDelegate
-// import com.zoontek.rnbootsplash.RNBootSplash
+import com.zoontek.rnbootsplash.RNBootSplash
 
 class MainActivity : ReactActivity() {
 
@@ -24,13 +23,7 @@ class MainActivity : ReactActivity() {
       DefaultReactActivityDelegate(this, mainComponentName, fabricEnabled)
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    /**
-     * val nightModeFlags = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-     * val isDarkMode = nightModeFlags == Configuration.UI_MODE_NIGHT_YES
-     * RNBootSplash.init(this, R.style.BootTheme) // ⬅️ initialize the splash screen
-     * setTheme(if (isDarkMode) R.style.BootTheme.Dark else R.style.BootTheme.Light)
-     * RNBootSplash.init(this, if (isDarkMode) R.style.BootTheme_Dark else R.style.BootTheme_Light)
-    */
+    RNBootSplash.init(this, R.style.BootTheme)
     super.onCreate(savedInstanceState)
   }
 }

@@ -1,23 +1,33 @@
-import analytics from '@react-native-firebase/analytics';
+import {
+  getAnalytics,
+  logEvent as logEventFirebase,
+} from '@react-native-firebase/analytics';
 
 export const logEvent = async (eventName, params = {}) => {
-  await analytics().logEvent(eventName, params);
+  const analytics = getAnalytics();
+  await logEventFirebase(analytics, eventName, params);
 };
 
 export const trackScreenView = async screenName => {
-  await analytics().logScreenView({
+  const analytics = getAnalytics();
+  await logEventFirebase(analytics, 'screen_view', {
     screen_name: screenName,
     screen_class: screenName,
   });
 };
 
-export const trackExpenseAdded = async (amount, category, merchant) => {
+export const trackExpenseAdded = async (
+  amount,
+  category,
+  merchant,
+  currency = 'IDR',
+) => {
   await logEvent('expense_added', {
     amount: amount,
     category: category,
     merchant: merchant || 'unknown',
-    currency: 'IDR',
-    value: amount / 1000, // Convert to thousands for analytics
+    currency: currency,
+    value: parseFloat((amount / 1000).toFixed(2)),
   });
 };
 
@@ -28,11 +38,11 @@ export const trackOCRUsed = async success => {
   });
 };
 
-export const trackBudgetSet = async budgetAmount => {
+export const trackBudgetSet = async (budgetAmount, currency = 'IDR') => {
   await logEvent('budget_set', {
     amount: budgetAmount,
-    currency: 'IDR',
-    value: budgetAmount / 1000,
+    currency: currency,
+    value: parseFloat((budgetAmount / 1000).toFixed(2)),
   });
 };
 

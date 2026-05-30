@@ -1,11 +1,5 @@
 <resources>
-    <!-- Light mode -->
-    <color name="bootsplash_background_light">#F8FAFC</color>
-    <color name="bootsplash_logo_light">#4F46E5</color>
-
-    <!-- Dark mode -->
-    <color name="bootsplash_background_dark">#0F172A</color>
-    <color name="bootsplash_logo_dark">#818CF8</color>
-
+    <color name="bootsplash_background">#F8FAFC</color>
+    <color name="bootsplash_logo">#4F46E5</color>
     <color name="colorPrimary">#4F46E5</color>
 </resources>

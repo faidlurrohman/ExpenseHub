@@ -53,7 +53,6 @@ export const SettingsProvider = ({ children }) => {
           setCurrency(storedCurrency);
         }
       } catch (e) {
-        console.error('Load settings error', e);
       } finally {
         setIsLoaded(true);
       }
