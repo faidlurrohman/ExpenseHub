@@ -6,6 +6,7 @@ import HomeScreen from '../screens/HomeScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import { useTheme } from 'react-native-paper';
 import { useSettings } from '../context/SettingsContext';
+import Tabbar from '../components/TabBar';
 
 const Tab = createBottomTabNavigator();
 
@@ -16,32 +17,33 @@ export default function BottomNavigator() {
 
   return (
     <Tab.Navigator
-      screenOptions={({ route, ...rest }) => ({
-        tabBarIcon: ({ color, size }) => {
-          const name =
-            route.name === 'HomeTab' ? 'cash-multiple' : 'cog-outline';
-          return <Icon name={name} size={size} color={color} />;
-        },
-        tabBarActiveTintColor: theme.colors.primary,
-        tabBarInactiveTintColor: theme.colors.onSurfaceVariant,
-        tabBarStyle: {
-          backgroundColor: theme.colors.surface,
-          borderTopColor: theme.colors.outline,
-        },
-        tabBarLabelPosition: 'below-icon',
-        tabBarLabelStyle: {
-          fontSize: 12,
-          fontFamily: 'Inter-Bold',
-        },
+      tabBar={props => <Tabbar {...props} />}
+      // screenOptions={({ route, ...rest }) => ({
+      //   tabBarIcon: ({ color, size }) => {
+      //     const name =
+      //       route.name === 'HomeTab' ? 'cash-multiple' : 'cog-outline';
+      //     return <Icon name={name} size={size} color={color} />;
+      //   },
+      //   tabBarActiveTintColor: theme.colors.primary,
+      //   tabBarInactiveTintColor: theme.colors.onSurfaceVariant,
+      //   tabBarStyle: {
+      //     backgroundColor: theme.colors.surface,
+      //     borderTopColor: theme.colors.outline,
+      //   },
+      //   tabBarLabelPosition: 'below-icon',
+      //   tabBarLabelStyle: {
+      //     fontSize: 12,
+      //     fontFamily: 'Inter-Bold',
+      //   },
 
-        headerTintColor: theme.colors.onSurface,
-        headerStyle: {
-          backgroundColor: theme.colors.surface,
-          elevation: 0,
-          shadowOpacity: 0,
-        },
-        headerTitleStyle: { fontWeight: 'bold' },
-      })}
+      //   headerTintColor: theme.colors.onSurface,
+      //   headerStyle: {
+      //     backgroundColor: theme.colors.surface,
+      //     elevation: 0,
+      //     shadowOpacity: 0,
+      //   },
+      //   headerTitleStyle: { fontWeight: 'bold' },
+      // })}
     >
       <Tab.Screen
         name="HomeTab"
