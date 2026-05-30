@@ -9,6 +9,7 @@ import { translations } from '../utils/translations';
 
 const CATS = [
   'food',
+  'drink',
   'transport',
   'shopping',
   'entertainment',
@@ -73,6 +74,7 @@ export default function AddExpenseScreen() {
         value={amount}
         onChangeText={setAmount}
         placeholder="0"
+        dense
       />
 
       <Text
@@ -90,6 +92,7 @@ export default function AddExpenseScreen() {
         value={merchant}
         onChangeText={setMerchant}
         placeholder={t.merchant}
+        dense
       />
       <Text
         variant="labelLarge"

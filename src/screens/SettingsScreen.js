@@ -103,6 +103,7 @@ export default function SettingsScreen() {
         value={profile.name}
         onChangeText={t => setProfile(p => ({ ...p, name: t }))}
         style={{ marginBottom: 16 }}
+        dense
       />
       <Text
         variant="labelLarge"
@@ -119,6 +120,7 @@ export default function SettingsScreen() {
         value={profile.budget}
         onChangeText={t => setProfile(p => ({ ...p, budget: t }))}
         style={{ marginBottom: 16 }}
+        dense
       />
 
       <Button
@@ -132,30 +134,188 @@ export default function SettingsScreen() {
 
       <Divider style={styles.div} />
 
+      <Text variant="titleMedium" style={{ marginBottom: 6 }}>
+        {t.currency}
+      </Text>
+
       <List.Item
-        title={t.theme}
-        description={getThemeDescription()}
-        right={() => (
-          <Switch value={themeMode === 'dark'} onValueChange={cycleTheme} />
+        title={t.idr}
+        contentStyle={{ paddingLeft: 0 }}
+        style={{ paddingRight: 0 }}
+        right={props => (
+          <List.Icon
+            {...props}
+            style={{ marginRight: 0 }}
+            color={
+              currency === 'IDR'
+                ? theme.colors.primary
+                : theme.colors.onSurfaceVariant
+            }
+            icon={
+              currency === 'IDR'
+                ? 'checkbox-marked-circle'
+                : 'checkbox-blank-circle-outline'
+            }
+          />
         )}
+        onPress={() => updateCurrency('IDR')}
       />
+
       <List.Item
-        title={t.lang}
-        description={language === 'id' ? t.indonesian : t.english}
-        onPress={() => updateLang(language === 'id' ? 'en' : 'id')}
-        right={props => <List.Icon {...props} icon="chevron-right" />}
-      />
-      <List.Item
-        title={t.currency}
-        description={currency === 'IDR' ? t.idr : t.usd}
-        onPress={() => updateCurrency(currency === 'IDR' ? 'USD' : 'IDR')}
-        right={props => <List.Icon {...props} icon="chevron-right" />}
+        title={t.usd}
+        contentStyle={{ paddingLeft: 0 }}
+        style={{ paddingRight: 0 }}
+        right={props => (
+          <List.Icon
+            {...props}
+            style={{ marginRight: 0 }}
+            color={
+              currency === 'USD'
+                ? theme.colors.primary
+                : theme.colors.onSurfaceVariant
+            }
+            icon={
+              currency === 'USD'
+                ? 'checkbox-marked-circle'
+                : 'checkbox-blank-circle-outline'
+            }
+          />
+        )}
+        onPress={() => updateCurrency('USD')}
       />
 
       <Divider style={styles.div} />
+
+      <Text variant="titleMedium" style={{ marginBottom: 6 }}>
+        {t.lang}
+      </Text>
+
+      <List.Item
+        title={t.indonesian}
+        contentStyle={{ paddingLeft: 0 }}
+        style={{ paddingRight: 0 }}
+        right={props => (
+          <List.Icon
+            {...props}
+            style={{ marginRight: 0 }}
+            color={
+              language === 'id'
+                ? theme.colors.primary
+                : theme.colors.onSurfaceVariant
+            }
+            icon={
+              language === 'id'
+                ? 'checkbox-marked-circle'
+                : 'checkbox-blank-circle-outline'
+            }
+          />
+        )}
+        onPress={() => updateLang('id')}
+      />
+
+      <List.Item
+        title={t.english}
+        contentStyle={{ paddingLeft: 0 }}
+        style={{ paddingRight: 0 }}
+        right={props => (
+          <List.Icon
+            {...props}
+            style={{ marginRight: 0 }}
+            color={
+              language === 'en'
+                ? theme.colors.primary
+                : theme.colors.onSurfaceVariant
+            }
+            icon={
+              language === 'en'
+                ? 'checkbox-marked-circle'
+                : 'checkbox-blank-circle-outline'
+            }
+          />
+        )}
+        onPress={() => updateLang('en')}
+      />
+
+      <Divider style={styles.div} />
+
+      <Text variant="titleMedium" style={{ marginBottom: 6 }}>
+        {t.theme}
+      </Text>
+
+      <List.Item
+        title={t.system}
+        contentStyle={{ paddingLeft: 0 }}
+        style={{ paddingRight: 0 }}
+        right={props => (
+          <List.Icon
+            {...props}
+            style={{ marginRight: 0 }}
+            color={
+              themeMode === 'system'
+                ? theme.colors.primary
+                : theme.colors.onSurfaceVariant
+            }
+            icon={
+              themeMode === 'system'
+                ? 'checkbox-marked-circle'
+                : 'checkbox-blank-circle-outline'
+            }
+          />
+        )}
+        onPress={() => updateTheme('system')}
+      />
+      <List.Item
+        title={t.light}
+        contentStyle={{ paddingLeft: 0 }}
+        style={{ paddingRight: 0 }}
+        right={props => (
+          <List.Icon
+            {...props}
+            style={{ marginRight: 0 }}
+            color={
+              themeMode === 'light'
+                ? theme.colors.primary
+                : theme.colors.onSurfaceVariant
+            }
+            icon={
+              themeMode === 'light'
+                ? 'checkbox-marked-circle'
+                : 'checkbox-blank-circle-outline'
+            }
+          />
+        )}
+        onPress={() => updateTheme('light')}
+      />
+      <List.Item
+        title={t.dark}
+        contentStyle={{ paddingLeft: 0 }}
+        style={{ paddingRight: 0 }}
+        right={props => (
+          <List.Icon
+            {...props}
+            style={{ marginRight: 0 }}
+            color={
+              themeMode === 'dark'
+                ? theme.colors.primary
+                : theme.colors.onSurfaceVariant
+            }
+            icon={
+              themeMode === 'dark'
+                ? 'checkbox-marked-circle'
+                : 'checkbox-blank-circle-outline'
+            }
+          />
+        )}
+        onPress={() => updateTheme('dark')}
+      />
+
+      <Divider style={styles.div} />
+
       <List.Item
         title={t.export}
         description={t.exportDesc}
+        contentStyle={{ paddingLeft: 0 }}
+        style={{ paddingRight: 0 }}
         onPress={exportData}
         right={props => <List.Icon {...props} icon="download" />}
       />

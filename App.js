@@ -6,6 +6,7 @@ import AppNavigator from './src/navigation/AppNavigator';
 import { SettingsProvider, useSettings } from './src/context/SettingsContext';
 import { Appearance, Platform, Animated, Dimensions } from 'react-native';
 import BootSplash from 'react-native-bootsplash';
+import { trackScreenView } from './src/utils/analytics';
 
 const useNativeDriver = Platform.OS !== 'web';
 
@@ -45,7 +46,8 @@ function ThemedBootSplash({ onAnimationEnd }) {
         toValue: 0,
         duration: 150,
         delay: 350,
-      }).start(() => {
+      }).start(async () => {
+        await trackScreenView('app_launch');
         onAnimationEnd();
       });
     },
