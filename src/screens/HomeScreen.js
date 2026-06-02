@@ -17,6 +17,7 @@ import { format } from 'date-fns';
 import { trackScreenView } from '../utils/analytics';
 import { useSettings } from '../context/SettingsContext';
 import { translations } from '../utils/translations';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export default function HomeScreen() {
   const { language, currency } = useSettings();
@@ -97,9 +98,9 @@ export default function HomeScreen() {
           <List.Item
             title={item.merchant || '-'}
             description={`${formatCurrency(item.amount, currency)} • ${
-              item.category
+              t[item.category] ?? t.other
             }`}
-            left={props => <List.Icon {...props} icon="cash" />}
+            left={props => <Ionicons {...props} name="pricetags" size={18} />}
             titleStyle={{ fontSize: 15, fontWeight: '500' }}
             descriptionStyle={{ color: theme.colors.caption }}
           />
@@ -117,7 +118,9 @@ export default function HomeScreen() {
             {t.empty}
           </Text>
         }
-        contentContainerStyle={{ paddingBottom: 100 }}
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ paddingBottom: 160 }}
+        showsVerticalScrollIndicator={false}
       />
 
       <FAB
@@ -129,7 +132,7 @@ export default function HomeScreen() {
           borderRadius: 999,
         }}
         color={theme.colors.onPrimary}
-        icon="plus"
+        icon={props => <Ionicons {...props} name="add" />}
         onPress={() => nav.navigate('AddExpense')}
       />
     </View>

@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Alert, ScrollView } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Alert,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import {
   TextInput,
   Button,
@@ -81,250 +88,263 @@ export default function SettingsScreen() {
   };
 
   return (
-    <ScrollView
-      style={{ flex: 1, backgroundColor: theme.colors.background }}
-      contentContainerStyle={{ padding: 16 }}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+      keyboardVerticalOffset={Platform.OS === 'android' ? 30 : 0}
     >
-      <Text variant="titleMedium" style={{ marginBottom: 20 }}>
-        {t.profile}
-      </Text>
-
-      <Text
-        variant="labelLarge"
-        style={{
-          fontWeight: 'bold',
-          marginBottom: 8,
-        }}
+      <ScrollView
+        style={{ flex: 1, backgroundColor: theme.colors.background }}
+        contentContainerStyle={{ padding: 16, paddingBottom: 160 }}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
       >
-        {t.name}
-      </Text>
-      <TextInput
-        mode="outlined"
-        value={profile.name}
-        onChangeText={t => setProfile(p => ({ ...p, name: t }))}
-        style={{ marginBottom: 16 }}
-        dense
-      />
-      <Text
-        variant="labelLarge"
-        style={{
-          fontWeight: 'bold',
-          marginBottom: 8,
-        }}
-      >
-        {t.budget}
-      </Text>
-      <TextInput
-        mode="outlined"
-        keyboardType="numeric"
-        value={profile.budget}
-        onChangeText={t => setProfile(p => ({ ...p, budget: t }))}
-        style={{ marginBottom: 16 }}
-        dense
-      />
+        <Text variant="titleMedium" style={{ marginBottom: 20 }}>
+          {t.profile}
+        </Text>
 
-      <Button
-        mode="contained"
-        onPress={save}
-        loading={loading}
-        style={styles.btn}
-      >
-        {t.save}
-      </Button>
+        <Text
+          variant="labelLarge"
+          style={{
+            fontWeight: 'bold',
+            marginBottom: 8,
+          }}
+        >
+          {t.name}
+        </Text>
+        <TextInput
+          mode="outlined"
+          value={profile.name}
+          onChangeText={t => setProfile(p => ({ ...p, name: t }))}
+          style={{ marginBottom: 16 }}
+          dense
+        />
+        <Text
+          variant="labelLarge"
+          style={{
+            fontWeight: 'bold',
+            marginBottom: 8,
+          }}
+        >
+          {t.budget}
+        </Text>
+        <TextInput
+          mode="outlined"
+          keyboardType="numeric"
+          value={profile.budget}
+          onChangeText={t => setProfile(p => ({ ...p, budget: t }))}
+          style={{ marginBottom: 16 }}
+          dense
+          right={<TextInput.Affix text={currency} />}
+        />
 
-      <Divider style={styles.div} />
+        <Button
+          mode="contained"
+          onPress={save}
+          loading={loading}
+          style={styles.btn}
+        >
+          {t.save}
+        </Button>
 
-      <Text variant="titleMedium" style={{ marginBottom: 6 }}>
-        {t.currency}
-      </Text>
+        <Divider style={styles.div} />
 
-      <List.Item
-        title={t.idr}
-        contentStyle={{ paddingLeft: 0 }}
-        style={{ paddingRight: 0 }}
-        right={props => (
-          <List.Icon
-            {...props}
-            style={{ marginRight: 0 }}
-            color={
-              currency === 'IDR'
-                ? theme.colors.primary
-                : theme.colors.onSurfaceVariant
-            }
-            icon={
-              currency === 'IDR'
-                ? 'checkbox-marked-circle'
-                : 'checkbox-blank-circle-outline'
-            }
-          />
-        )}
-        onPress={() => updateCurrency('IDR')}
-      />
+        <Text variant="titleMedium" style={{ marginBottom: 6 }}>
+          {t.currency}
+        </Text>
 
-      <List.Item
-        title={t.usd}
-        contentStyle={{ paddingLeft: 0 }}
-        style={{ paddingRight: 0 }}
-        right={props => (
-          <List.Icon
-            {...props}
-            style={{ marginRight: 0 }}
-            color={
-              currency === 'USD'
-                ? theme.colors.primary
-                : theme.colors.onSurfaceVariant
-            }
-            icon={
-              currency === 'USD'
-                ? 'checkbox-marked-circle'
-                : 'checkbox-blank-circle-outline'
-            }
-          />
-        )}
-        onPress={() => updateCurrency('USD')}
-      />
+        <List.Item
+          title={t.idr}
+          contentStyle={{ paddingLeft: 0 }}
+          style={{ paddingRight: 0 }}
+          right={props => (
+            <List.Icon
+              {...props}
+              style={{ marginRight: 0 }}
+              color={
+                currency === 'IDR'
+                  ? theme.colors.primary
+                  : theme.colors.onSurfaceVariant
+              }
+              icon={
+                currency === 'IDR'
+                  ? 'checkbox-marked-circle'
+                  : 'checkbox-blank-circle-outline'
+              }
+            />
+          )}
+          onPress={() => updateCurrency('IDR')}
+        />
 
-      <Divider style={styles.div} />
+        <List.Item
+          title={t.usd}
+          contentStyle={{ paddingLeft: 0 }}
+          style={{ paddingRight: 0 }}
+          right={props => (
+            <List.Icon
+              {...props}
+              style={{ marginRight: 0 }}
+              color={
+                currency === 'USD'
+                  ? theme.colors.primary
+                  : theme.colors.onSurfaceVariant
+              }
+              icon={
+                currency === 'USD'
+                  ? 'checkbox-marked-circle'
+                  : 'checkbox-blank-circle-outline'
+              }
+            />
+          )}
+          onPress={() => updateCurrency('USD')}
+        />
 
-      <Text variant="titleMedium" style={{ marginBottom: 6 }}>
-        {t.lang}
-      </Text>
+        <Divider style={styles.div} />
 
-      <List.Item
-        title={t.indonesian}
-        contentStyle={{ paddingLeft: 0 }}
-        style={{ paddingRight: 0 }}
-        right={props => (
-          <List.Icon
-            {...props}
-            style={{ marginRight: 0 }}
-            color={
-              language === 'id'
-                ? theme.colors.primary
-                : theme.colors.onSurfaceVariant
-            }
-            icon={
-              language === 'id'
-                ? 'checkbox-marked-circle'
-                : 'checkbox-blank-circle-outline'
-            }
-          />
-        )}
-        onPress={() => updateLang('id')}
-      />
+        <Text variant="titleMedium" style={{ marginBottom: 6 }}>
+          {t.lang}
+        </Text>
 
-      <List.Item
-        title={t.english}
-        contentStyle={{ paddingLeft: 0 }}
-        style={{ paddingRight: 0 }}
-        right={props => (
-          <List.Icon
-            {...props}
-            style={{ marginRight: 0 }}
-            color={
-              language === 'en'
-                ? theme.colors.primary
-                : theme.colors.onSurfaceVariant
-            }
-            icon={
-              language === 'en'
-                ? 'checkbox-marked-circle'
-                : 'checkbox-blank-circle-outline'
-            }
-          />
-        )}
-        onPress={() => updateLang('en')}
-      />
+        <List.Item
+          title={t.indonesian}
+          contentStyle={{ paddingLeft: 0 }}
+          style={{ paddingRight: 0 }}
+          right={props => (
+            <List.Icon
+              {...props}
+              style={{ marginRight: 0 }}
+              color={
+                language === 'id'
+                  ? theme.colors.primary
+                  : theme.colors.onSurfaceVariant
+              }
+              icon={
+                language === 'id'
+                  ? 'checkbox-marked-circle'
+                  : 'checkbox-blank-circle-outline'
+              }
+            />
+          )}
+          onPress={() => updateLang('id')}
+        />
 
-      <Divider style={styles.div} />
+        <List.Item
+          title={t.english}
+          contentStyle={{ paddingLeft: 0 }}
+          style={{ paddingRight: 0 }}
+          right={props => (
+            <List.Icon
+              {...props}
+              style={{ marginRight: 0 }}
+              color={
+                language === 'en'
+                  ? theme.colors.primary
+                  : theme.colors.onSurfaceVariant
+              }
+              icon={
+                language === 'en'
+                  ? 'checkbox-marked-circle'
+                  : 'checkbox-blank-circle-outline'
+              }
+            />
+          )}
+          onPress={() => updateLang('en')}
+        />
 
-      <Text variant="titleMedium" style={{ marginBottom: 6 }}>
-        {t.theme}
-      </Text>
+        <Divider style={styles.div} />
 
-      <List.Item
-        title={t.system}
-        contentStyle={{ paddingLeft: 0 }}
-        style={{ paddingRight: 0 }}
-        right={props => (
-          <List.Icon
-            {...props}
-            style={{ marginRight: 0 }}
-            color={
-              themeMode === 'system'
-                ? theme.colors.primary
-                : theme.colors.onSurfaceVariant
-            }
-            icon={
-              themeMode === 'system'
-                ? 'checkbox-marked-circle'
-                : 'checkbox-blank-circle-outline'
-            }
-          />
-        )}
-        onPress={() => updateTheme('system')}
-      />
-      <List.Item
-        title={t.light}
-        contentStyle={{ paddingLeft: 0 }}
-        style={{ paddingRight: 0 }}
-        right={props => (
-          <List.Icon
-            {...props}
-            style={{ marginRight: 0 }}
-            color={
-              themeMode === 'light'
-                ? theme.colors.primary
-                : theme.colors.onSurfaceVariant
-            }
-            icon={
-              themeMode === 'light'
-                ? 'checkbox-marked-circle'
-                : 'checkbox-blank-circle-outline'
-            }
-          />
-        )}
-        onPress={() => updateTheme('light')}
-      />
-      <List.Item
-        title={t.dark}
-        contentStyle={{ paddingLeft: 0 }}
-        style={{ paddingRight: 0 }}
-        right={props => (
-          <List.Icon
-            {...props}
-            style={{ marginRight: 0 }}
-            color={
-              themeMode === 'dark'
-                ? theme.colors.primary
-                : theme.colors.onSurfaceVariant
-            }
-            icon={
-              themeMode === 'dark'
-                ? 'checkbox-marked-circle'
-                : 'checkbox-blank-circle-outline'
-            }
-          />
-        )}
-        onPress={() => updateTheme('dark')}
-      />
+        <Text variant="titleMedium" style={{ marginBottom: 6 }}>
+          {t.theme}
+        </Text>
 
-      <Divider style={styles.div} />
+        <List.Item
+          title={t.system}
+          contentStyle={{ paddingLeft: 0 }}
+          style={{ paddingRight: 0 }}
+          right={props => (
+            <List.Icon
+              {...props}
+              style={{ marginRight: 0 }}
+              color={
+                themeMode === 'system'
+                  ? theme.colors.primary
+                  : theme.colors.onSurfaceVariant
+              }
+              icon={
+                themeMode === 'system'
+                  ? 'checkbox-marked-circle'
+                  : 'checkbox-blank-circle-outline'
+              }
+            />
+          )}
+          onPress={() => updateTheme('system')}
+        />
+        <List.Item
+          title={t.light}
+          contentStyle={{ paddingLeft: 0 }}
+          style={{ paddingRight: 0 }}
+          right={props => (
+            <List.Icon
+              {...props}
+              style={{ marginRight: 0 }}
+              color={
+                themeMode === 'light'
+                  ? theme.colors.primary
+                  : theme.colors.onSurfaceVariant
+              }
+              icon={
+                themeMode === 'light'
+                  ? 'checkbox-marked-circle'
+                  : 'checkbox-blank-circle-outline'
+              }
+            />
+          )}
+          onPress={() => updateTheme('light')}
+        />
+        <List.Item
+          title={t.dark}
+          contentStyle={{ paddingLeft: 0 }}
+          style={{ paddingRight: 0 }}
+          right={props => (
+            <List.Icon
+              {...props}
+              style={{ marginRight: 0 }}
+              color={
+                themeMode === 'dark'
+                  ? theme.colors.primary
+                  : theme.colors.onSurfaceVariant
+              }
+              icon={
+                themeMode === 'dark'
+                  ? 'checkbox-marked-circle'
+                  : 'checkbox-blank-circle-outline'
+              }
+            />
+          )}
+          onPress={() => updateTheme('dark')}
+        />
 
-      <List.Item
-        title={t.export}
-        description={t.exportDesc}
-        contentStyle={{ paddingLeft: 0 }}
-        style={{ paddingRight: 0 }}
-        onPress={exportData}
-        right={props => <List.Icon {...props} icon="download" />}
-      />
-      <Text
-        style={{ marginVertical: 16, color: theme.colors.error, fontSize: 12 }}
-      >
-        {t.warn}
-      </Text>
-    </ScrollView>
+        <Divider style={styles.div} />
+
+        <List.Item
+          title={t.export}
+          description={t.exportDesc}
+          contentStyle={{ paddingLeft: 0 }}
+          style={{ paddingRight: 0 }}
+          onPress={exportData}
+          right={props => <List.Icon {...props} icon="download" />}
+        />
+        <Text
+          style={{
+            marginVertical: 16,
+            color: theme.colors.error,
+            fontSize: 12,
+          }}
+        >
+          {t.warn}
+        </Text>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
